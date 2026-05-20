@@ -1,0 +1,157 @@
+# ==================================================
+# Ahmad Costimetics - Git Ignore
+# ==================================================
+
+# Dependencies
+node_modules/
+.pnp
+.pnp.js
+.yarn/
+
+# Build outputs
+dist/
+build/
+out/
+.next/
+.nuxt/
+.cache/
+.parcel-cache/
+
+# Environment variables (NEVER commit)
+.env
+.env.local
+.env.development.local
+.env.test.local
+.env.production.local
+.env.production
+.env.staging
+
+# Keep example
+!.env.example
+
+# Editor directories and files
+.vscode/*
+!.vscode/extensions.json
+!.vscode/settings.json
+.idea/
+*.swp
+*.swo
+*~
+.DS_Store
+Thumbs.db
+
+# Logs
+logs/
+*.log
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+pnpm-debug.log*
+lerna-debug.log*
+
+# Testing
+coverage/
+.nyc_output/
+*.lcov
+
+# TypeScript
+*.tsbuildinfo
+.tsbuildcache
+
+# Vite
+.vite/
+
+# Uploads (server-side)
+uploads/
+public/uploads/
+
+# Backups
+*.backup
+*.bak
+backup/
+
+# OS files
+.DS_Store
+.DS_Store?
+._*
+.Spotlight-V100
+.Trashes
+ehthumbs.db
+Thumbs.db
+
+# Local development
+*.local
+.serverless/
+
+# Editor backup files
+*~
+*.swp
+*.swo
+
+# Cloud provider configs
+.vercel
+.netlify
+.firebase/
+firebase-debug.log
+
+# Database
+*.db
+*.sqlite
+*.sqlite3
+
+# Sensitive files
+*.pem
+*.key
+*.cert
+secrets/
+credentials.json
+
+# Cache
+.eslintcache
+.stylelintcache
+
+# Optional eslint cache
+.eslintcache
+
+# Output of 'npm pack'
+*.tgz
+
+# Yarn Integrity file
+.yarn-integrity
+
+# dotenv environment variables file
+.env*
+
+# Stores VSCode versions used for testing VSCode extensions
+.vscode-test
+
+# Mac
+.AppleDouble
+.LSOverride
+
+# Windows
+$RECYCLE.BIN/
+*.cab
+*.msi
+*.msm
+*.msp
+*.lnk
+
+# Linux
+*~
+.fuse_hidden*
+.directory
+.Trash-*
+.nfs*
+
+# Misc
+.cache
+.temp
+.tmp
+.history
+.husky/_/
+
+# Project specific
+public/images/uploaded/
+test-results/
+playwright-report/
