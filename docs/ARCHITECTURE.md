@@ -89,6 +89,10 @@ Detailed technical architecture of the Ahmad Costimetics platform.
 │  │ Nodemailer │ │  Sanity    │ │   Sentry   │ │  Google    │  │
 │  │  (Email)   │ │   (CMS)    │ │ (Monitor)  │ │ Analytics  │  │
 │  └────────────┘ └────────────┘ └────────────┘ └────────────┘  │
+│                                                                  │
+│  ┌───────────────────────────────────────────────────┐           │
+│  │  External Admin Dashboard (Built Separately)      │           │
+│  └───────────────────────────────────────────────────┘           │
 └─────────────────────────────────────────────────────────────────┘
 ```
 
@@ -110,11 +114,6 @@ App
 │   │   │   ├── Footer
 │   │   │   ├── ChatWidget
 │   │   │   └── CookieConsent
-│   │   │
-│   │   └── AdminLayout (Protected)
-│   │       ├── Sidebar
-│   │       ├── AdminHeader
-│   │       └── <Outlet> (Admin Pages)
 ```
 
 ### Component Communication
@@ -169,9 +168,8 @@ App
                      ▼
 ┌─────────────────────────────────────────────────┐
 │  Layer 4: Authorization                          │
-│  • Role check (customer/admin/super_admin)      │
+│  • Role check (customer)                         │
 │  • Permission check                              │
-│  • Email whitelist (admin only)                  │
 └─────────────────────────────────────────────────┘
                      │
                      ▼
@@ -237,7 +235,7 @@ Customer                  Frontend              Backend              External
     │                        │                       │ ─────►Socket.IO │
     │                        │                       │                  │
     │                        │  ┌─ Admin Approves ─┐│                  │
-    │                        │  ▼                  ││                  │
+    │                        │  ▼ (Separate App)   ││                  │
     │                        │  Admin Reviews ────►││                  │
     │                        │  Approves Payment   ││                  │
     │                        │  ──────────────────►││ Update Order    │
@@ -326,8 +324,8 @@ db.payments.createIndex({ reference: 1 }, { unique: true });
 ### Socket.IO Event Flow
 
 ```
-Customer Browser              Server                Admin Browser
-      │                          │                        │
+Customer Browser              Server                Admin Dashboard
+      │                          │                  (Separate App)
       │ Connect                  │                        │
       ├─────────────────────────►│                        │
       │ join_user(userId)        │                        │
@@ -403,16 +401,16 @@ Customer Browser              Server                Admin Browser
 │           DOMAIN: ahmadcostimetics.com           │
 └─────────────────────────────────────────────────┘
                        │
-              ┌────────┼────────┐
-              ▼        ▼        ▼
-         (frontend)  (api)   (admin)
-              │        │        │
-              ▼        ▼        ▼
-┌────────────────┐ ┌────────────┐ ┌────────────┐
-│    Vercel      │ │  Railway/  │ │   Vercel   │
-│   (Frontend)   │ │   Render   │ │  (Admin)   │
-│                │ │  (Backend) │ │            │
-└────────────────┘ └────────────┘ └────────────┘
+              ┌────────┴────────┐
+              ▼                 ▼
+         (frontend)           (api)
+              │                 │
+              ▼                 ▼
+┌────────────────┐      ┌────────────┐
+│    Vercel      │      │  Railway/  │
+│   (Frontend)   │      │   Render   │
+│                │      │  (Backend) │
+└────────────────┘      └────────────┘
                        │
                        ▼
 ┌─────────────────────────────────────────────────┐

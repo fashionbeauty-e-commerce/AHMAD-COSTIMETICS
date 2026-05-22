@@ -33,20 +33,9 @@ Complete enterprise ecommerce platform with all core features.
 - About, Contact, FAQ pages
 
 #### Admin Features
-- Admin dashboard with analytics and stats
-- Amazon-style product management with 4-tab form:
-  - Basic Info (name, brand, SKU, price, stock)
-  - Images (Cloudinary upload, drag & drop)
-  - Details (description, features, specs, tags)
-  - Shipping (weight, dimensions, delivery)
-- Category management with image upload
-- Order management with payment approval workflow
-- Customer management
-- Real-time admin-to-customer chat
-- Admin user management (super admin only)
-- Settings configuration
-- Inventory tracking with low stock alerts
-- Audit logs for all admin actions
+- Admin Dashboard UI moved to a separate repository for enhanced security.
+- This repository focuses on the Customer Storefront and core API services.
+- Admin APIs remain available for external dashboard consumption.
 
 #### Authentication & Security
 - Clerk authentication (Email/Password, Google OAuth)
@@ -69,7 +58,6 @@ Complete enterprise ecommerce platform with all core features.
 - Cloudinary for image storage
 - Stripe + PayPal payment integration
 - Tailwind CSS 4 for styling
-- Recharts for analytics charts
 - Lucide React for icons
 - React Router for navigation
 - Multer for file uploads
@@ -79,7 +67,6 @@ Complete enterprise ecommerce platform with all core features.
 - Terms of Service (16 sections)
 - Cookie Policy with interactive preferences
 - Cookie consent banner
-- Admin access control documentation
 
 #### Documentation
 - Comprehensive README
@@ -91,7 +78,6 @@ Complete enterprise ecommerce platform with all core features.
 - Contributing Guidelines
 - Deployment Guide
 - Cloudinary Setup Guide
-- Admin Access Guide
 - Features List
 
 #### Mobile Responsive
@@ -122,10 +108,6 @@ Complete enterprise ecommerce platform with all core features.
 
 ### [1.1.0] - Planned
 - Email notifications (order updates, password reset)
-- Advanced analytics dashboard
-- Bulk product import (CSV/Excel)
-- Discount/coupon management UI
-- Customer reviews moderation
 - Multi-language support (i18n)
 - Dark mode
 

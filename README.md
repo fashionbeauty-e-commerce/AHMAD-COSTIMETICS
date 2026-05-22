@@ -21,15 +21,6 @@
 - Wishlist, reviews, and ratings
 - Mobile-optimized experience
 
-### 👨‍ For Admins
-- Amazon-style product management
-- Real-time order notifications
-- Payment approval workflow
-- Customer chat dashboard
-- Sales analytics with charts
-- Multi-admin management with permissions
-- Cloudinary-powered image uploads
-
 ### 🔐 Security
 - Clerk authentication with OAuth
 - JWT token-based API
@@ -75,7 +66,6 @@ Comprehensive documentation is available in the `/docs` folder:
 | 🛡️ [Security Guide](docs/SECURITY.md) | Security practices & compliance |
 | 🚀 [Deployment](DEPLOYMENT.md) | Production deployment guide |
 | 🌥️ [Cloudinary Setup](CLOUDINARY_SETUP.md) | Image storage setup |
-| 🔐 [Admin Access](ADMIN_ACCESS.md) | Admin management guide |
 | ✨ [Features List](FEATURES.md) | All features documented |
 | 🤝 [Contributing](docs/CONTRIBUTING.md) | How to contribute |
 | 📝 [Changelog](docs/CHANGELOG.md) | Version history |
@@ -91,7 +81,6 @@ Comprehensive documentation is available in the `/docs` folder:
 - **React Router 6** for navigation
 - **Clerk** for authentication
 - **Firebase** for real-time features
-- **Recharts** for analytics
 - **Socket.IO Client** for live updates
 
 ### Backend
@@ -119,7 +108,6 @@ ahmad-costimetics/
 ├── public/              # Static assets, favicon
 ├── src/                 # Frontend source code
 │   ├── storefront/      # Customer-facing pages
-│   ├── admin/           # Admin dashboard
 │   ├── components/      # Shared components
 │   ├── services/        # API integrations
 │   └── App.tsx          # Main app
@@ -142,7 +130,7 @@ See [BLUEPRINT.md](docs/BLUEPRINT.md) for complete folder structure.
 - Luxury fashion aesthetic
 - Premium animations
 - Mobile-first responsive design
-- Dark mode (admin dashboard)
+- Dark mode support
 
 ### ⚡ Performance
 - Lazy loading
@@ -174,12 +162,6 @@ See [BLUEPRINT.md](docs/BLUEPRINT.md) for complete folder structure.
 
 ### Test Credentials
 
-#### Admin Account
-```
-Email: fashionbeauty101f@gmail.com
-Method: Sign in with Google via Clerk
-Access: Full admin dashboard
-```
 
 #### Customer Account
 ```
@@ -209,15 +191,12 @@ npm run preview      # Preview production build
 
 ### Environment Variables
 
-See [.env.example](.env.example) for all required variables.
-
 **Critical Variables:**
 - `MONGODB_URI` - MongoDB connection string
 - `JWT_SECRET` - JWT signing secret
 - `VITE_CLERK_PUBLISHABLE_KEY` - Clerk public key
 - `CLERK_SECRET_KEY` - Clerk secret key
 - `CLOUDINARY_*` - Cloudinary credentials
-- `ADMIN_EMAILS` - Authorized admin emails
 
 ---
 
@@ -251,8 +230,6 @@ See [DEPLOYMENT.md](DEPLOYMENT.md) for detailed instructions.
 - ✅ Browse & search products
 - ✅ Add to cart & checkout
 - ✅ Payment flow
-- ✅ Admin product management
-- ✅ Order approval workflow
 - ✅ Real-time chat
 - ✅ Mobile responsiveness
 
@@ -273,7 +250,7 @@ This project implements comprehensive security measures:
 - 🛡️ Authorization: Role-based access
 - 🔐 Encryption: TLS 1.3 + bcrypt
 - 🚫 Rate limiting: Express-rate-limit
-- 📋 Audit logs: All admin actions
+- 📋 Audit logs (Server-side)
 - ✅ Input validation: All endpoints
 - 🛡️ HTTP headers: Helmet.js
 
@@ -373,7 +350,7 @@ The "Ahmad Costimetics" brand is the property of Ahmad Costimetics. Use of brand
 
 ### Inspiration
 - Amazon's product management
-- Shopify's admin dashboard
+- Shopify's ease of use
 - Alibaba's chat system
 
 ---

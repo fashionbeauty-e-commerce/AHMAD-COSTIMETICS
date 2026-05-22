@@ -27,7 +27,7 @@ The platform uses two databases:
   lastName: String (required),
   phone: String,
   avatar: String (URL),
-  role: String (enum: ['customer', 'admin', 'super_admin'], default: 'customer'),
+  role: String (enum: ['customer', 'admin'], default: 'customer'),
   isAdmin: Boolean (default: false),
   
   addresses: [{
@@ -633,83 +633,9 @@ The platform uses two databases:
 - markAsUsed(userId, orderId)
 ```
 
-### 📋 AuditLog Schema
-**Collection**: `auditlogs`
-
-```javascript
-{
-  _id: ObjectId,
-  
-  action: String (required, enum: [
-    'LOGIN', 'LOGOUT',
-    'CREATE_USER', 'UPDATE_USER', 'DELETE_USER',
-    'CREATE_PRODUCT', 'UPDATE_PRODUCT', 'DELETE_PRODUCT',
-    'CREATE_CATEGORY', 'UPDATE_CATEGORY', 'DELETE_CATEGORY',
-    'CREATE_ORDER', 'UPDATE_ORDER', 'DELETE_ORDER',
-    'APPROVE_PAYMENT', 'REJECT_PAYMENT',
-    'CREATE_COUPON', 'UPDATE_COUPON', 'DELETE_COUPON',
-    'SEND_NOTIFICATION', 'EXPORT_DATA',
-    'CHANGE_SETTINGS', 'VIEW_REPORT', 'OTHER'
-  ]),
-  
-  entity: String (required),       // e.g., 'Product', 'Order'
-  entityId: ObjectId,
-  
-  user: ObjectId (ref: User, required),
-  userEmail: String (required),
-  userName: String (required),
-  role: String (required),
-  
-  changes: {
-    before: Mixed,
-    after: Mixed
-  },
-  
-  metadata: {
-    ipAddress: String,
-    userAgent: String,
-    platform: String,
-    location: String
-  },
-  
-  status: String (enum: ['success', 'failed', 'pending']),
-  errorMessage: String,
-  
-  severity: String (enum: ['low', 'medium', 'high', 'critical']),
-  
-  createdAt: Date
-}
-
-// Indexes
-{ user: 1, createdAt: -1 }
-{ action: 1, createdAt: -1 }
-{ entity: 1, entityId: 1 }
-{ severity: 1, createdAt: -1 }
-
-// Optional TTL index (auto-delete after 1 year)
-// { createdAt: 1 } expireAfterSeconds: 31536000
-```
-
 ---
 
 ## 🔥 Firebase Firestore Collections
-
-### Admins Collection
-**Path**: `/admins/{email}`
-
-```javascript
-{
-  email: string,
-  name: string,
-  role: 'admin' | 'manager',
-  permissions: string[],
-  isActive: boolean,
-  addedBy: string,
-  addedAt: Timestamp,
-  updatedAt: Timestamp,
-  lastLogin: Timestamp
-}
-```
 
 ### ChatRooms Collection
 **Path**: `/chatRooms/{roomId}`
@@ -825,7 +751,6 @@ Coupon (N) ────── (N) Product (applicable)
 5. Payment document created, references Order
 6. Stock decremented in Product documents
 7. Notification created for User
-8. AuditLog entry created
 ```
 
 ### Real-time Chat

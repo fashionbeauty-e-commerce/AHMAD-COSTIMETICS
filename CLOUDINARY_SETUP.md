@@ -12,8 +12,6 @@ Complete guide to setting up Cloudinary for Ahmad Costimetics ecommerce platform
 - ✅ Image optimization helpers
 - ✅ Folder organization (products, categories, banners, payments, chat, profiles)
 - ✅ Backend deletion API (`server/routes/upload.js`)
-- ✅ Integrated in Admin Products page
-- ✅ Integrated in Admin Categories page
 - ✅ Integrated in Chat Widget (image attachments)
 - ✅ Mobile responsive uploader
 
@@ -76,10 +74,9 @@ VITE_CLOUDINARY_UPLOAD_PRESET=ahmad_costimetics
 ## 🎯 Step 5: Test Upload
 
 1. Start your dev server: `npm run dev`
-2. Sign in as admin (`fashionbeauty101f@gmail.com`)
-3. Go to `/admin/products` → Click "Add Product"
-4. Drag & drop an image or click to upload
-5. ✅ Image uploads to Cloudinary automatically
+2. Use the Chat Widget or Profile section
+3. Upload an image
+4. ✅ Image uploads to Cloudinary automatically
 
 ---
 
@@ -118,31 +115,13 @@ console.log(result.secure_url); // Image URL
 console.log(result.public_id);  // For deletion later
 ```
 
-### Helper Functions (Pre-configured)
-
-```typescript
-import { 
-  uploadProductImage,
-  uploadCategoryImage,
-  uploadBanner,
-  uploadPaymentProof,
-  uploadProfilePhoto,
-  uploadChatAttachment
-} from './services/cloudinary';
-
-// Each helper has appropriate folder, size limits, allowed types
-const result = await uploadProductImage(file, (progress) => {
-  console.log(`Uploading: ${progress}%`);
-});
-```
-
 ### React Component Usage
 
 ```tsx
 import ImageUploader from './components/ImageUploader';
 
 <ImageUploader
-  folder="products"
+  folder="profiles"
   multiple={true}
   maxFiles={5}
   maxFileSize={5}
@@ -272,15 +251,12 @@ This is more than enough for most ecommerce stores starting out.
 
 ## 🧪 Testing Checklist
 
-- [ ] Upload single product image
-- [ ] Upload multiple product images (5)
 - [ ] Drag & drop functionality works
 - [ ] Progress bar shows during upload
 - [ ] File size validation (try 10MB+ file)
 - [ ] File type validation (try .exe file)
 - [ ] Image preview shows immediately
 - [ ] Remove image works
-- [ ] Image displays correctly on product page
 - [ ] Mobile upload works
 - [ ] Chat image attachment works
 

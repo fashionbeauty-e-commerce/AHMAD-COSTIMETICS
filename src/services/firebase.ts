@@ -25,42 +25,6 @@ const MESSAGES_COLLECTION = "messages";
 const CHAT_ROOMS_COLLECTION = "chatRooms";
 
 // Product Operations
-export const addProduct = async (product: any) => {
-  try {
-    const docRef = await addDoc(collection(db, PRODUCTS_COLLECTION), {
-      ...product,
-      createdAt: serverTimestamp(),
-      updatedAt: serverTimestamp(),
-    });
-    return docRef.id;
-  } catch (error) {
-    console.error("Error adding product:", error);
-    throw error;
-  }
-};
-
-export const updateProduct = async (id: string, product: any) => {
-  try {
-    const productRef = doc(db, PRODUCTS_COLLECTION, id);
-    await updateDoc(productRef, {
-      ...product,
-      updatedAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error("Error updating product:", error);
-    throw error;
-  }
-};
-
-export const deleteProduct = async (id: string) => {
-  try {
-    await deleteDoc(doc(db, PRODUCTS_COLLECTION, id));
-  } catch (error) {
-    console.error("Error deleting product:", error);
-    throw error;
-  }
-};
-
 export const subscribeToProducts = (callback: (products: any[]) => void) => {
   const q = query(collection(db, PRODUCTS_COLLECTION), orderBy("createdAt", "desc"));
   return onSnapshot(q, (snapshot) => {
@@ -87,21 +51,12 @@ export const createOrder = async (order: any) => {
   }
 };
 
-export const updateOrderStatus = async (id: string, status: string) => {
-  try {
-    const orderRef = doc(db, ORDERS_COLLECTION, id);
-    await updateDoc(orderRef, {
-      status,
-      updatedAt: serverTimestamp(),
-    });
-  } catch (error) {
-    console.error("Error updating order:", error);
-    throw error;
-  }
-};
-
-export const subscribeToOrders = (callback: (orders: any[]) => void) => {
-  const q = query(collection(db, ORDERS_COLLECTION), orderBy("createdAt", "desc"));
+export const subscribeToOrders = (userId: string, callback: (orders: any[]) => void) => {
+  const q = query(
+    collection(db, ORDERS_COLLECTION),
+    where("userId", "==", userId),
+    orderBy("createdAt", "desc")
+  );
   return onSnapshot(q, (snapshot) => {
     const orders = snapshot.docs.map(doc => ({
       id: doc.id,
@@ -181,21 +136,6 @@ export const subscribeToChatRooms = (userId: string, callback: (rooms: any[]) =>
   const q = query(
     collection(db, CHAT_ROOMS_COLLECTION),
     where("participants", "array-contains", userId),
-    orderBy("lastMessageAt", "desc")
-  );
-  return onSnapshot(q, (snapshot) => {
-    const rooms = snapshot.docs.map(doc => ({
-      id: doc.id,
-      ...doc.data(),
-    }));
-    callback(rooms);
-  });
-};
-
-// Admin: Subscribe to ALL chat rooms (sees all customer conversations)
-export const subscribeToAllChatRooms = (callback: (rooms: any[]) => void) => {
-  const q = query(
-    collection(db, CHAT_ROOMS_COLLECTION),
     orderBy("lastMessageAt", "desc")
   );
   return onSnapshot(q, (snapshot) => {
