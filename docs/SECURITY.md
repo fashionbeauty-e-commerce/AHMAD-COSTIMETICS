@@ -67,35 +67,26 @@ We follow **Defense in Depth** - multiple layers of security so that if one laye
 └────────────────────────────────────┘
               │
 ┌────────────────────────────────────┐
-│  ADMIN                              │
+│  ADMIN (API Access Only)            │
 │  Whitelisted email + admin role     │
-│  • Manage products                  │
-│  • Manage categories                │
-│  • Approve payments                 │
-│  • Manage customers                 │
-│  • View analytics                   │
+│  • Manage products (via API)        │
+│  • Manage categories (via API)      │
+│  • Approve payments (via API)       │
+│  • Manage customers (via API)       │
 └────────────────────────────────────┘
               │
 ┌────────────────────────────────────┐
-│  SUPER ADMIN                        │
+│  SUPER ADMIN (API Access Only)      │
 │  Hardcoded emails only              │
-│  • Manage other admins              │
-│  • System settings                  │
-│  • Audit logs                       │
+│  • Manage other admins (via API)    │
+│  • System settings (via API)        │
 └────────────────────────────────────┘
 ```
 
-### Admin Email Whitelist
-```javascript
-// Hardcoded in src/services/adminAuth.ts
-const SUPER_ADMIN_EMAILS = [
-  'fashionbeauty101f@gmail.com',
-  'konkcee@gmail.com'
-];
+> **Note**: The Admin Dashboard UI has been moved to a separate repository for enhanced security. This repository only contains the Customer Storefront.
 
-// Cannot be removed via UI
-// Always have full access
-```
+### Admin Email Whitelist
+Admin access is controlled via backend environment variables and hardcoded super admin emails in the authentication middleware.
 
 ---
 
@@ -379,36 +370,13 @@ VITE_CLOUDINARY_CLOUD_NAME=...
 
 ## 📋 Audit Logging
 
-All admin actions are logged:
-
-```javascript
-{
-  action: 'APPROVE_PAYMENT',
-  entity: 'Order',
-  entityId: ObjectId,
-  user: ObjectId,
-  userEmail: 'admin@example.com',
-  changes: {
-    before: { status: 'pending' },
-    after: { status: 'approved' }
-  },
-  metadata: {
-    ipAddress: '192.168.1.1',
-    userAgent: 'Mozilla/5.0...',
-    timestamp: Date
-  },
-  severity: 'medium'
-}
-```
+Critical administrative actions performed via the API are logged server-side for audit purposes.
 
 ### Logged Actions
 - User logins/logouts
 - Failed login attempts
-- Admin actions (CRUD on resources)
+- Critical resource changes (CRUD via Admin API)
 - Payment approvals/rejections
-- Permission changes
-- Data exports
-- Settings changes
 
 ---
 

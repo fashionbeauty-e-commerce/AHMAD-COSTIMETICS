@@ -318,39 +318,6 @@ export function fileToBase64(file: File): Promise<string> {
 }
 
 /**
- * Helper: Upload product image
- */
-export const uploadProductImage = (file: File, onProgress?: (p: number) => void) =>
-  uploadToCloudinary(file, { 
-    folder: 'products', 
-    onProgress,
-    maxFileSize: 5,
-    tags: ['product'],
-  });
-
-/**
- * Helper: Upload category image
- */
-export const uploadCategoryImage = (file: File, onProgress?: (p: number) => void) =>
-  uploadToCloudinary(file, { 
-    folder: 'categories', 
-    onProgress,
-    maxFileSize: 3,
-    tags: ['category'],
-  });
-
-/**
- * Helper: Upload banner
- */
-export const uploadBanner = (file: File, onProgress?: (p: number) => void) =>
-  uploadToCloudinary(file, { 
-    folder: 'banners', 
-    onProgress,
-    maxFileSize: 10,
-    tags: ['banner'],
-  });
-
-/**
  * Helper: Upload payment proof
  */
 export const uploadPaymentProof = (file: File, onProgress?: (p: number) => void) =>

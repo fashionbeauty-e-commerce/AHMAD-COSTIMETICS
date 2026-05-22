@@ -1,4 +1,5 @@
-import { ValidationError } from 'mongoose';
+import mongoose from 'mongoose';
+const { ValidationError } = mongoose;
 
 // Custom error class
 export class AppError extends Error {
