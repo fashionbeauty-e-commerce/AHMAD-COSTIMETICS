@@ -35,7 +35,6 @@ git push origin main
    NODE_ENV=production
    MONGODB_URI=your_mongodb_atlas_uri
    JWT_SECRET=your_production_jwt_secret
-   ADMIN_EMAILS=fashionbeauty101f@gmail.com,konkcee@gmail.com
    STRIPE_SECRET_KEY=sk_live_...
    CLOUDINARY_CLOUD_NAME=...
    ```
@@ -229,20 +228,7 @@ npm start
 
 ---
 
-## 10. Admin Setup
-
-1. **Create First Admin**
-   - Register account with admin email
-   - System automatically grants admin access based on `ADMIN_EMAILS`
-
-2. **Access Dashboard**
-   - Login at `/sign-in`
-   - Click "Admin" button in header
-   - Dashboard URL: `/admin`
-
----
-
-## 11. Testing Payment Flow
+## 10. Testing Payment Flow
 
 1. **Test Mode (Stripe)**
    - Use test card: `4242 4242 4242 4242`
@@ -251,12 +237,11 @@ npm start
 
 2. **Mobile Money Test**
    - Upload test payment proof
-   - Admin approves in dashboard
-   - Order status updates
+   - Order status updates after verification
 
 ---
 
-## 12. Troubleshooting
+## 11. Troubleshooting
 
 ### Connection Issues
 ```bash
@@ -284,7 +269,7 @@ lsof -ti:5000 | xargs kill -9
 
 ---
 
-## 13. Support
+## 12. Support
 
 - **Email**: support@ahmadcostimetics.com
 - **Documentation**: See README.md

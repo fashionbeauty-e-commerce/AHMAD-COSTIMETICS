@@ -130,28 +130,16 @@ export default function Header() {
                     <img 
                       src={user.picture} 
                       alt={user.name || 'User'}
-                      className={`w-8 h-8 md:w-9 md:h-9 rounded-full object-cover border-2 ${
-                        user.isAdmin ? 'border-amber-400 ring-2 ring-amber-200' : 'border-purple-200'
-                      }`}
+                      className="w-8 h-8 md:w-9 md:h-9 rounded-full object-cover border-2 border-purple-200"
                     />
                   ) : (
-                    <div className={`w-8 h-8 md:w-9 md:h-9 bg-gradient-to-br ${
-                      user.isAdmin ? 'from-amber-500 to-orange-500' : 'from-purple-500 to-pink-500'
-                    } rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold`}>
+                    <div className="w-8 h-8 md:w-9 md:h-9 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white text-xs md:text-sm font-bold">
                       {user.firstName?.[0]?.toUpperCase() || user.email[0].toUpperCase()}
-                    </div>
-                  )}
-                  {/* Admin Crown Badge */}
-                  {user.isAdmin && (
-                    <div className="absolute -top-1 -right-1 w-4 h-4 bg-gradient-to-br from-amber-400 to-amber-600 rounded-full flex items-center justify-center shadow-md" title="Admin">
-                      <Crown className="w-2.5 h-2.5 text-white" />
                     </div>
                   )}
                 </div>
                 <div className="hidden lg:block text-left text-sm">
-                  <p className="text-xs text-gray-500">
-                    {user.isAdmin ? '👑 Admin' : 'Welcome,'}
-                  </p>
+                  <p className="text-xs text-gray-500">Welcome,</p>
                   <p className="font-medium text-sm leading-none">{user.firstName || user.email.split('@')[0]}</p>
                 </div>
               </button>
@@ -162,38 +150,9 @@ export default function Header() {
                   <div className="px-4 py-3 border-b">
                     <div className="flex items-center gap-2 mb-1">
                       <p className="text-sm font-semibold truncate flex-1">{user.name}</p>
-                      {user.isSuperAdmin && (
-                        <span title="Super Admin">
-                          <Crown className="w-4 h-4 text-amber-500" />
-                        </span>
-                      )}
-                      {user.isAdmin && !user.isSuperAdmin && (
-                        <span title="Admin">
-                          <Shield className="w-4 h-4 text-purple-600" />
-                        </span>
-                      )}
                     </div>
                     <p className="text-xs text-gray-500 truncate">{user.email}</p>
-                    {user.isAdmin && (
-                      <span className="inline-block mt-1.5 text-[10px] bg-purple-100 text-purple-700 px-2 py-0.5 rounded-full font-bold uppercase tracking-wide">
-                        {user.isSuperAdmin ? '👑 Super Admin' : '🛡️ Admin'}
-                      </span>
-                    )}
                   </div>
-
-                  {/* ADMIN-ONLY ACCESS - Hidden from public users */}
-                  {user.isAdmin && (
-                    <>
-                      <Link 
-                        to="/admin" 
-                        onClick={() => setShowMenu(false)} 
-                        className="flex items-center gap-3 px-4 py-2.5 mx-2 my-1 bg-gradient-to-r from-purple-600 to-indigo-600 hover:from-purple-700 hover:to-indigo-700 text-white text-sm rounded-lg font-medium shadow-md"
-                      >
-                        <Shield className="w-4 h-4" /> Admin Dashboard
-                      </Link>
-                      <div className="border-t my-1 mx-2"></div>
-                    </>
-                  )}
 
                   <Link to="/account" onClick={() => setShowMenu(false)} className="flex items-center gap-3 px-4 py-2 hover:bg-gray-50 text-sm">
                     <User className="w-4 h-4" /> My Profile

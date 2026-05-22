@@ -28,16 +28,16 @@
 ┌──────────────────────────────────────────────────────────────┐
 │                    PRESENTATION LAYER                          │
 ├──────────────────────────────────────────────────────────────┤
-│  Customer Storefront        │      Admin Dashboard            │
-│  - HomePage                 │      - Dashboard                │
-│  - ProductsPage             │      - Products (CRUD)          │
-│  - ProductDetailPage        │      - Categories               │
-│  - SearchPage              │      - Orders                   │
-│  - CartPage                │      - Customers                │
-│  - CheckoutPage            │      - Chat                     │
-│  - AccountPage             │      - Admin Users              │
-│  - WishlistPage            │      - Settings                 │
-│  - Legal Pages             │                                 │
+│  Customer Storefront                                          │
+│  - HomePage                                                  │
+│  - ProductsPage                                              │
+│  - ProductDetailPage                                         │
+│  - SearchPage                                                │
+│  - CartPage                                                  │
+│  - CheckoutPage                                              │
+│  - AccountPage                                               │
+│  - WishlistPage                                              │
+│  - Legal Pages                                               │
 └──────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -57,14 +57,12 @@
 │  Frontend Services          │      Backend APIs               │
 │  - cloudinary.ts           │      - /api/auth                │
 │  - firebase.ts             │      - /api/products            │
-│  - adminAuth.ts            │      - /api/orders              │
-│  - api.js                  │      - /api/payments            │
+│  - api.js                  │      - /api/orders              │
+│                            │      - /api/payments            │
 │                            │      - /api/categories          │
 │                            │      - /api/messages            │
-│                            │      - /api/admin               │
 │                            │      - /api/upload              │
 │                            │      - /api/notifications       │
-│                            │      - /api/analytics           │
 └──────────────────────────────────────────────────────────────┘
                               │
                               ▼
@@ -108,7 +106,6 @@
   "routing": "React Router 6",
   "state": "React Hooks + Context",
   "auth": "@clerk/clerk-react 5",
-  "charts": "Recharts 2",
   "icons": "Lucide React",
   "animations": "Framer Motion 11",
   "realtime_client": "Firebase 10 + Socket.IO Client"
@@ -198,38 +195,12 @@ ahmad-ecommerce/
 │   │       ├── TermsPage.tsx
 │   │       └── CookiePolicyPage.tsx
 │   │
-│   ├── 📂 admin/                       # Admin dashboard
-│   │   ├── AdminLayout.tsx
-│   │   ├── AdminDashboard.tsx
-│   │   ├── 📂 components/
-│   │   │   ├── Sidebar.tsx
-│   │   │   ├── AdminHeader.tsx
-│   │   │   ├── StatsCards.tsx
-│   │   │   ├── SalesChart.tsx
-│   │   │   ├── SalesByChannel.tsx
-│   │   │   ├── RecentOrders.tsx
-│   │   │   ├── TopSellingProducts.tsx
-│   │   │   ├── OrdersOverview.tsx
-│   │   │   ├── TopCustomers.tsx
-│   │   │   ├── LowStockAlerts.tsx
-│   │   │   └── BottomStats.tsx
-│   │   │
-│   │   └── 📂 pages/
-│   │       ├── AdminProducts.tsx       # Amazon-style CRUD
-│   │       ├── AdminCategories.tsx
-│   │       ├── AdminOrders.tsx         # Payment approval
-│   │       ├── AdminCustomers.tsx
-│   │       ├── AdminChat.tsx           # Customer support
-│   │       ├── AdminUsers.tsx          # Manage admins
-│   │       └── AdminSettings.tsx
-│   │
 │   ├── 📂 components/                  # Shared components
 │   │   └── ImageUploader.tsx           # Cloudinary uploader
 │   │
 │   ├── 📂 services/                    # API integrations
 │   │   ├── firebase.ts                 # Firebase + Firestore
 │   │   ├── cloudinary.ts               # Image uploads
-│   │   ├── adminAuth.ts                # Admin management
 │   │   ├── api.js                      # Backend API client
 │   │   └── api.d.ts                    # TypeScript defs
 │   │
@@ -267,8 +238,6 @@ ahmad-ecommerce/
 │   │   ├── reviews.js                  # /api/reviews
 │   │   ├── messages.js                 # /api/messages
 │   │   ├── notifications.js            # /api/notifications
-│   │   ├── admin.js                    # /api/admin
-│   │   ├── analytics.js                # /api/analytics
 │   │   └── upload.js                   # /api/upload
 │   │
 │   └── 📂 middleware/
@@ -378,24 +347,6 @@ Role-based access granted
 | Notifications | ✅ | In-app notifications |
 | Mobile Responsive | ✅ | All devices |
 
-### Admin Features (✅ Working)
-
-| Feature | Status | Description |
-|---------|--------|-------------|
-| Dashboard Analytics | ✅ | Sales, orders, customers |
-| Product Management | ✅ | Amazon-style CRUD with 4 tabs |
-| Multi-image Upload | ✅ | Up to 8 images via Cloudinary |
-| Category Management | ✅ | Hierarchical with images |
-| Order Management | ✅ | Status updates |
-| Payment Approval | ✅ | Approve/reject payments |
-| Customer Management | ✅ | View, manage users |
-| Live Chat | ✅ | Respond to customers |
-| Admin User Management | ✅ | Add/remove admins (super admin only) |
-| Inventory Tracking | ✅ | Low stock alerts |
-| Real-time Updates | ✅ | Socket.IO + Firebase |
-| Audit Logs | ✅ | Track all admin actions |
-| Settings | ✅ | Store configuration |
-
 ### Legal Pages (✅ Working)
 
 | Page | Status | Features |
@@ -483,21 +434,6 @@ POST   /api/messages
 PUT    /api/messages/:id/read
 DELETE /api/messages/:id
 GET    /api/messages/unread-count
-```
-
-#### Admin
-```
-GET    /api/admin/dashboard       [admin]
-GET    /api/admin/analytics       [admin]
-GET    /api/admin/users           [admin]
-PUT    /api/admin/users/:id/role  [admin]
-PUT    /api/admin/users/:id/activate  [admin]
-GET    /api/admin/orders          [admin]
-GET    /api/admin/products/low-stock  [admin]
-GET    /api/admin/activity        [admin]
-POST   /api/admin/coupons         [admin]
-GET    /api/admin/coupons         [admin]
-POST   /api/admin/broadcast       [admin]
 ```
 
 #### Upload

@@ -19,9 +19,7 @@ export default function NotificationBell() {
   useEffect(() => {
     if (!user) return;
 
-    const unsubscribe = user.isAdmin
-      ? subscribeToAdminNotifications(setNotifications)
-      : subscribeToUserNotifications(user.email, setNotifications);
+    const unsubscribe = subscribeToUserNotifications(user.email, setNotifications);
 
     return () => unsubscribe();
   }, [user]);

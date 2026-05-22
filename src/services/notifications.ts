@@ -9,6 +9,7 @@ const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:3000';
 
 export interface Notification {
   _id?: string;
+  id?: string;
   type: 'order' | 'payment' | 'shipping' | 'promotion' | 'review' | 'message' | 'system' | 'product';
   title: string;
   message: string;
@@ -17,6 +18,7 @@ export interface Notification {
   isRead: boolean;
   createdAt: string;
   priority?: 'low' | 'medium' | 'high' | 'urgent';
+  image?: string;
 }
 
 // Get user notifications
@@ -87,7 +89,7 @@ export async function markAsRead(notificationId: string) {
 }
 
 // Mark all notifications as read
-export async function markAllAsRead() {
+export async function markAllAsRead(userEmail: string) {
   const token = getAuthToken();
   if (!token) return false;
 
@@ -145,127 +147,9 @@ export function subscribeToNotifications(
   return () => clearInterval(intervalId);
 }
 
-// Notify new product (admin only)
-export async function notifyNewProduct(product: {
-  id: string;
-  name: string;
-  price: number;
-  brand?: string;
-  thumbnail?: string;
-  category?: string;
-}) {
-  const token = getAuthToken();
-  if (!token) return false;
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/notifications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        type: 'product',
-        title: '🆕 New Product Added!',
-        message: `${product.brand ? product.brand + ' — ' : ''}${product.name} is now available for $${product.price}`,
-        icon: '🛍️',
-        link: `/products/${product.id}`,
-        data: { productId: product.id, category: product.category }
-      })
-    });
-
-    return response.ok;
-  } catch (error) {
-    console.error('Error notifying new product:', error);
-    return false;
-  }
-}
-
-// Notify order update
-export async function notifyOrderUpdate(
-  userId: string,
-  orderId: string,
-  status: 'confirmed' | 'processing' | 'shipped' | 'delivered' | 'cancelled'
-) {
-  const token = getAuthToken();
-  if (!token) return false;
-
-  const statusEmoji: Record<string, string> = {
-    confirmed: '✅',
-    processing: '⚙️',
-    shipped: '🚚',
-    delivered: '📦',
-    cancelled: '❌'
-  };
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/notifications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        type: 'order',
-        title: `Order ${status.charAt(0).toUpperCase() + status.slice(1)}`,
-        message: `Your order #${orderId.slice(-6).toUpperCase()} has been ${status}`,
-        icon: statusEmoji[status] || '📋',
-        link: '/account',
-        priority: status === 'delivered' ? 'high' : 'medium'
-      })
-    });
-
-    return response.ok;
-  } catch (error) {
-    console.error('Error notifying order update:', error);
-    return false;
-  }
-}
-
-// Notify promotion (admin only)
-export async function notifyPromotion(
-  title: string,
-  message: string,
-  link?: string
-) {
-  const token = getAuthToken();
-  if (!token) return false;
-
-  try {
-    const response = await fetch(`${BASE_URL}/api/notifications`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-        'Authorization': `Bearer ${token}`
-      },
-      body: JSON.stringify({
-        type: 'promotion',
-        title: `🎉 ${title}`,
-        message,
-        icon: '🎁',
-        link: link || '/search',
-        priority: 'high'
-      })
-    });
-
-    return response.ok;
-  } catch (error) {
-    console.error('Error notifying promotion:', error);
-    return false;
-  }
-}
-
 // Subscribe to user notifications (real-time polling)
 export function subscribeToUserNotifications(
   userEmail: string,
-  callback: (notifications: Notification[]) => void,
-  interval = 5000
-) {
-  return subscribeToNotifications(callback, interval);
-}
-
-// Subscribe to admin notifications
-export function subscribeToAdminNotifications(
   callback: (notifications: Notification[]) => void,
   interval = 5000
 ) {
