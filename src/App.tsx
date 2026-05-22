@@ -144,8 +144,7 @@ export default function App() {
   return (
     <ClerkProvider 
       publishableKey={CLERK_PUBLISHABLE_KEY}
-      afterSignInUrl={import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL || '/'}
-      afterSignUpUrl={import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL || '/'}
+      fallbackRedirectUrl="/"
       signInUrl={import.meta.env.VITE_CLERK_SIGN_IN_URL || '/sign-in'}
       signUpUrl={import.meta.env.VITE_CLERK_SIGN_UP_URL || '/sign-up'}
     >
