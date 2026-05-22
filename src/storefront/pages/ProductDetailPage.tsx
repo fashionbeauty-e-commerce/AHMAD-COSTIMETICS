@@ -8,17 +8,21 @@ import { subscribeToProducts } from '../../services/firebase';
 import { useAuth } from '../../App';
 import { addToCart } from '../../services/cartStore';
 import { addToWishlist, isInWishlist, removeFromWishlist } from '../../services/cartStore';
-import { doc, onSnapshot, collection, addDoc, query, where, orderBy, serverTimestamp, getDocs } from 'firebase/firestore';
+import { doc, onSnapshot } from 'firebase/firestore';
 import { db } from '../../services/firebase';
+import { reviewsAPI } from '../../services/api';
 
 interface Review {
   id: string;
-  userName: string;
-  userEmail: string;
+  user: {
+    firstName: string;
+    lastName: string;
+    avatar?: string;
+  };
   rating: number;
   title: string;
   content: string;
-  createdAt: any;
+  createdAt: string;
 }
 
 export default function ProductDetailPage() {
@@ -82,15 +86,15 @@ export default function ProductDetailPage() {
   // Load reviews for this product
   useEffect(() => {
     if (!id) return;
-    const q = query(
-      collection(db, 'reviews'),
-      where('productId', '==', id),
-      orderBy('createdAt', 'desc')
-    );
-    const unsub = onSnapshot(q, (snap) => {
-      setReviews(snap.docs.map(d => ({ id: d.id, ...d.data() })) as Review[]);
-    }, () => {});
-    return () => unsub();
+    const fetchReviews = async () => {
+      try {
+        const response = await reviewsAPI.getAll({ product: id });
+        setReviews(response.data.reviews);
+      } catch (error) {
+        console.error('Error fetching reviews:', error);
+      }
+    };
+    fetchReviews();
   }, [id]);
 
   // Wishlist check
@@ -184,35 +188,22 @@ export default function ProductDetailPage() {
 
     setSubmittingReview(true);
     try {
-      // Check if user already reviewed
-      const existing = await getDocs(query(
-        collection(db, 'reviews'),
-        where('productId', '==', id),
-        where('userEmail', '==', user.email)
-      ));
-      
-      if (!existing.empty) {
-        alert('You have already reviewed this product');
-        setSubmittingReview(false);
-        return;
-      }
-
-      await addDoc(collection(db, 'reviews'), {
-        productId: id,
-        productName: product.name,
-        userEmail: user.email,
-        userName: user.name || user.firstName || user.email.split('@')[0],
+      await reviewsAPI.create({
+        product: id,
         rating: reviewRating,
         title: reviewTitle,
         content: reviewContent,
-        status: 'approved',
-        createdAt: serverTimestamp(),
       });
 
       setReviewTitle('');
       setReviewContent('');
       setReviewRating(5);
       setShowReviewForm(false);
+
+      // Refresh reviews
+      const response = await reviewsAPI.getAll({ product: id });
+      setReviews(response.data.reviews);
+
       alert('Review submitted! Thank you for your feedback.');
     } catch (error: any) {
       alert('Failed to submit review: ' + error.message);
@@ -536,32 +527,39 @@ export default function ProductDetailPage() {
         {/* Reviews List */}
         {reviews.length > 0 ? (
           <div className="space-y-4">
-            {reviews.map(review => (
-              <div key={review.id} className="bg-white border border-gray-100 rounded-xl p-4 md:p-5">
-                <div className="flex items-start gap-3">
-                  <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0">
-                    {review.userName?.charAt(0).toUpperCase() || 'U'}
-                  </div>
-                  <div className="flex-1 min-w-0">
-                    <div className="flex items-center gap-2 mb-1 flex-wrap">
-                      <span className="font-semibold text-sm">{review.userName}</span>
-                      <div className="flex">
-                        {[1,2,3,4,5].map(i => (
-                          <Star key={i} className={`w-3.5 h-3.5 ${i <= review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
-                        ))}
+            {reviews.map(review => {
+              const userName = review.user ? `${review.user.firstName} ${review.user.lastName}` : 'Anonymous';
+              return (
+                <div key={review.id} className="bg-white border border-gray-100 rounded-xl p-4 md:p-5">
+                  <div className="flex items-start gap-3">
+                    {review.user?.avatar ? (
+                      <img src={review.user.avatar} alt={userName} className="w-10 h-10 rounded-full object-cover shrink-0" />
+                    ) : (
+                      <div className="w-10 h-10 bg-gradient-to-br from-purple-500 to-pink-500 rounded-full flex items-center justify-center text-white font-bold text-sm shrink-0">
+                        {userName.charAt(0).toUpperCase()}
                       </div>
-                      {review.createdAt && (
-                        <span className="text-xs text-gray-400">
-                          {(review.createdAt.toDate ? review.createdAt.toDate() : new Date(review.createdAt)).toLocaleDateString()}
-                        </span>
-                      )}
+                    )}
+                    <div className="flex-1 min-w-0">
+                      <div className="flex items-center gap-2 mb-1 flex-wrap">
+                        <span className="font-semibold text-sm">{userName}</span>
+                        <div className="flex">
+                          {[1,2,3,4,5].map(i => (
+                            <Star key={i} className={`w-3.5 h-3.5 ${i <= review.rating ? 'fill-yellow-400 text-yellow-400' : 'text-gray-300'}`} />
+                          ))}
+                        </div>
+                        {review.createdAt && (
+                          <span className="text-xs text-gray-400">
+                            {new Date(review.createdAt).toLocaleDateString()}
+                          </span>
+                        )}
+                      </div>
+                      {review.title && <h4 className="font-bold text-sm mb-1">{review.title}</h4>}
+                      <p className="text-sm text-gray-700">{review.content}</p>
                     </div>
-                    {review.title && <h4 className="font-bold text-sm mb-1">{review.title}</h4>}
-                    <p className="text-sm text-gray-700">{review.content}</p>
                   </div>
                 </div>
-              </div>
-            ))}
+              );
+            })}
           </div>
         ) : (
           <div className="text-center py-8 bg-gray-50 rounded-xl">
