@@ -15,10 +15,12 @@ export interface Notification {
   message: string;
   icon?: string;
   link?: string;
+  image?: string;
   isRead: boolean;
   createdAt: string;
   priority?: 'low' | 'medium' | 'high' | 'urgent';
   image?: string;
+  data?: Record<string, any>;
 }
 
 // Get user notifications
