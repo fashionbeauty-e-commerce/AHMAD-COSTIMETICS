@@ -6,6 +6,7 @@ import { protect } from '../middleware/auth.js';
 import { asyncHandler, AppError } from '../middleware/errorHandler.js';
 import { auditLog } from '../middleware/logger.js';
 import { sendVerificationEmail } from '../utils/email.js';
+import { getAdminEmails, getSuperAdminEmails } from '../utils/adminEmails.js';
 
 const router = express.Router();
 
@@ -44,13 +45,10 @@ router.post('/register', asyncHandler(async (req, res) => {
   }
 
   // Check if admin email
-  const SUPER_ADMIN_EMAILS = ['fashionbeauty101f@gmail.com', 'konkcee@gmail.com'];
-  const adminEmails = (process.env.ADMIN_EMAILS || 'fashionbeauty101f@gmail.com,konkcee@gmail.com')
-    .split(',')
-    .map(e => e.trim().toLowerCase());
-  
   const normalizedEmail = email.toLowerCase().trim();
-  const isSuper = SUPER_ADMIN_EMAILS.includes(normalizedEmail);
+  const adminEmails = getAdminEmails();
+  const superAdminEmails = getSuperAdminEmails();
+  const isSuper = superAdminEmails.includes(normalizedEmail);
   const isAdmin = adminEmails.includes(normalizedEmail) || isSuper;
 
   // Create user
@@ -268,13 +266,10 @@ router.post('/clerk-sync', asyncHandler(async (req, res) => {
   let user = await User.findOne({ email: email.toLowerCase().trim() });
 
   // Admin and Super Admin check
-  const SUPER_ADMIN_EMAILS = ['fashionbeauty101f@gmail.com', 'konkcee@gmail.com'];
-  const adminEmails = (process.env.ADMIN_EMAILS || 'fashionbeauty101f@gmail.com,konkcee@gmail.com')
-    .split(',')
-    .map(e => e.trim().toLowerCase());
-  
   const normalizedEmail = email.toLowerCase().trim();
-  const isSuper = SUPER_ADMIN_EMAILS.includes(normalizedEmail);
+  const adminEmails = getAdminEmails();
+  const superAdminEmails = getSuperAdminEmails();
+  const isSuper = superAdminEmails.includes(normalizedEmail);
   const isAdmin = adminEmails.includes(normalizedEmail) || isSuper;
 
   if (user) {

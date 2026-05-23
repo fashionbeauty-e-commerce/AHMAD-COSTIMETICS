@@ -3,12 +3,12 @@
  * Verifies Clerk session tokens on the backend
  */
 
+import { getAdminEmails } from '../utils/adminEmails.js';
+
 const CLERK_SECRET_KEY = process.env.CLERK_SECRET_KEY || 'sk_test_pe3czBDcvwV3hhjH4osK26ywotv92TQ7MCsGZBlJrq';
 const CLERK_API_URL = 'https://api.clerk.com/v1';
 
-const ADMIN_EMAILS = (process.env.ADMIN_EMAILS || 'fashionbeauty101f@gmail.com,konkcee@gmail.com')
-  .split(',')
-  .map(e => e.trim().toLowerCase());
+const ADMIN_EMAILS = getAdminEmails();
 
 /**
  * Verify Clerk session token by calling Clerk's API

@@ -1,5 +1,6 @@
 import jwt from 'jsonwebtoken';
 import User from '../models/User.js';
+import { getAdminEmails, getSuperAdminEmails } from '../utils/adminEmails.js';
 
 // Protect routes - verify JWT token
 export const protect = async (req, res, next) => {
@@ -121,14 +122,12 @@ export const optionalAuth = async (req, res, next) => {
 
 // Check if user is admin based on email (for Clerk integration)
 export const checkAdminEmail = async (req, res, next) => {
-  const SUPER_ADMIN_EMAILS = ['fashionbeauty101f@gmail.com', 'konkcee@gmail.com'];
-  const adminEmails = (process.env.ADMIN_EMAILS || 'fashionbeauty101f@gmail.com,konkcee@gmail.com')
-    .split(',')
-    .map(e => e.trim().toLowerCase());
+  const adminEmails = getAdminEmails();
+  const superAdminEmails = getSuperAdminEmails();
   
   if (req.user) {
     const normalizedEmail = req.user.email.toLowerCase().trim();
-    const isSuper = SUPER_ADMIN_EMAILS.includes(normalizedEmail);
+    const isSuper = superAdminEmails.includes(normalizedEmail);
     const isAdmin = adminEmails.includes(normalizedEmail) || isSuper;
 
     if (isAdmin) {
