@@ -110,33 +110,7 @@ export default function NotificationBell() {
     const unsubscribe = user.isAdmin
       ? subscribeToAdminNotifications(handleIncomingNotifications)
       : subscribeToUserNotifications(user.email, handleIncomingNotifications);
-
-    const handleIncomingNotifications = (incoming: Notification[]) => {
-      const normalized = incoming.map(normalizeNotification);
-      setNotifications(normalized);
-
-      if (hasLoadedRef.current) {
-        const newProductNotifications = normalized.filter(
-          (notification) =>
-            notification.type === 'product' &&
-            !notification.isRead &&
-            !previousIdsRef.current.includes(notification.id)
-        );
-
-        if (newProductNotifications.length > 0) {
-          void playNotificationTone();
-        }
-      }
-
-      previousIdsRef.current = normalized.map((notification) => notification.id);
-      hasLoadedRef.current = true;
-    };
-
-    const unsubscribe = user.isAdmin
-      ? subscribeToAdminNotifications(handleIncomingNotifications)
-      : subscribeToUserNotifications(user.email, handleIncomingNotifications);
->>>>>>> f3d9a92 (Save local changes)
-
+    
     return () => unsubscribe();
   }, [user]);
 

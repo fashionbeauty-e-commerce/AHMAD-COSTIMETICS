@@ -19,8 +19,15 @@ export interface Notification {
   isRead: boolean;
   createdAt: string;
   priority?: 'low' | 'medium' | 'high' | 'urgent';
-  image?: string;
   data?: Record<string, any>;
+}
+
+// Subscribe to admin notifications (same polling for now)
+export function subscribeToAdminNotifications(
+  callback: (notifications: Notification[]) => void,
+  interval = 5000
+) {
+  return subscribeToNotifications(callback, interval);
 }
 
 // Get user notifications
