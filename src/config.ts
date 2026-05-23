@@ -1,6 +1,8 @@
+import { getApiBaseUrl } from './utils/apiBase';
+
 // All sensitive data is loaded from environment variables
 export const CONFIG = {
-  BASE_URL: import.meta.env.VITE_BASE_URL || 'http://localhost:5000',
+  BASE_URL: getApiBaseUrl(),
   
   COMPANY: {
     NAME: import.meta.env.VITE_COMPANY_NAME || 'Ahmad Costimetics',

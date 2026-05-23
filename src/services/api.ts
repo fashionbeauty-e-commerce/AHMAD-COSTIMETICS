@@ -1,6 +1,7 @@
 import { useAuth } from '../App';
+import { getApiBaseUrl } from '../utils/apiBase';
 
-const BASE_URL = import.meta.env.VITE_BASE_URL || 'http://localhost:5000';
+const BASE_URL = getApiBaseUrl();
 
 // Helper to get auth token from localStorage
 export const getAuthToken = () => {

@@ -1,3 +1,5 @@
+import { getApiBaseUrl } from '../utils/apiBase';
+
 /**
  * Cloudinary Storage Service
  * 
@@ -238,10 +240,10 @@ export async function uploadMultipleToCloudinary(
  */
 export async function deleteFromCloudinary(publicId: string): Promise<void> {
   // For production, this should call your backend which uses the API secret
-  const apiUrl = import.meta.env.VITE_API_URL || 'http://localhost:5000/api';
+  const apiUrl = `${getApiBaseUrl()}/api/upload/delete`;
   const token = localStorage.getItem('token');
   
-  const response = await fetch(`${apiUrl}/upload/delete`, {
+  const response = await fetch(apiUrl, {
     method: 'POST',
     headers: {
       'Content-Type': 'application/json',

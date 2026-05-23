@@ -47,8 +47,10 @@ export function useAuth() {
       if (!isLoaded) return;
 
       if (isSignedIn && clerkUser) {
-        const email = clerkUser.primaryEmailAddress?.emailAddress || '';
-        
+        const primaryEmailAddress = clerkUser.emailAddresses?.find((emailAddress) => emailAddress.id === clerkUser.primaryEmailAddressId) || clerkUser.emailAddresses?.[0];
+        const email = primaryEmailAddress?.emailAddress || clerkUser.primaryEmailAddress?.emailAddress || '';
+        const fullName = clerkUser.fullName || [clerkUser.firstName, clerkUser.lastName].filter(Boolean).join(' ') || email;
+
         try {
           // Import auth API
           const { authAPI, setAuthToken } = await import('./services/api');
@@ -70,7 +72,7 @@ export function useAuth() {
           setUser({
             uid: clerkUser.id,
             email,
-            name: clerkUser.fullName || `${clerkUser.firstName || ''} ${clerkUser.lastName || ''}`.trim(),
+            name: fullName,
             firstName: clerkUser.firstName || undefined,
             lastName: clerkUser.lastName || undefined,
             picture: clerkUser.imageUrl,
@@ -80,7 +82,7 @@ export function useAuth() {
           setUser({
             uid: clerkUser.id,
             email,
-            name: clerkUser.fullName || email,
+            name: fullName,
             firstName: clerkUser.firstName || undefined,
             lastName: clerkUser.lastName || undefined,
             picture: clerkUser.imageUrl,
@@ -144,7 +146,9 @@ export default function App() {
   return (
     <ClerkProvider 
       publishableKey={CLERK_PUBLISHABLE_KEY}
-      fallbackRedirectUrl="/"
+      fallbackRedirectUrl={import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL || '/'}
+      afterSignInUrl={import.meta.env.VITE_CLERK_AFTER_SIGN_IN_URL || '/'}
+      afterSignUpUrl={import.meta.env.VITE_CLERK_AFTER_SIGN_UP_URL || '/'}
       signInUrl={import.meta.env.VITE_CLERK_SIGN_IN_URL || '/sign-in'}
       signUpUrl={import.meta.env.VITE_CLERK_SIGN_UP_URL || '/sign-up'}
     >
